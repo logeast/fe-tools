@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState } from "react";
 import { Row, Col, Card, Form, Input, Upload, Space } from "antd";
 import { PageContainer } from "@ant-design/pro-layout";
 import { useControllableValue } from "@umijs/hooks";
@@ -7,23 +7,46 @@ import "./panguSpace.less";
 import Button from "antd/es/button";
 import { UploadOutlined, DownloadOutlined } from "@ant-design/icons";
 
-const PanguSpace: React.FC<{}> = () => {
-    const [state, setState] = useControllableValue();
-    const [value, setVlaue] = useState();
+interface FileOptionConfig {
+    name?: string;
+    type?: string;
+}
 
-    const getFileInfo = (file) => {
+const stringToArray = (obj: any) => [obj];
+
+const PanguSpace: React.FC<{}> = () => {
+    const [value, setValue] = useControllableValue<string>();
+    const [resultValue, setResultValue] = useState<string>();
+    const [fileOption, setFileOption] = useState<FileOptionConfig>();
+
+    const getFileInfo = (file: any) => {
+        console.log({ file });
+        setFileOption(file);
+
         const render = new FileReader();
         render.readAsText(file);
         render.onload = (result) => {
-            const a = result.target?.result
-            setVlaue(a)
-        }
-        // console.log(file);
-    }
+            setValue(result.target?.result);
+            setResultValue(pangu.spacing(result.target?.result));
+        };
+    };
 
-    useEffect(() => {
-        pangu.spacing(value)
-    })
+    const handleChange = (event) => {
+        setValue(event.target.value);
+        setResultValue(pangu.spacing(event.target.value));
+    };
+
+    const handleDownload = () => {
+        const resultBlob = new Blob(stringToArray(resultValue), {
+            type: fileOption?.type,
+        });
+        const url = window.URL.createObjectURL(resultBlob);
+        const aDom: any = document.createElement("a");
+        aDom.download = fileOption?.name;
+        aDom.href = url;
+        aDom.click();
+        window.URL.revokeObjectURL(url);
+    };
 
     return (
         <PageContainer>
@@ -60,11 +83,7 @@ const PanguSpace: React.FC<{}> = () => {
                                         rows={24}
                                         placeholder="请输入需要格式化的内容"
                                         value={value}
-                                        onChange={(e) =>
-                                            setState(
-                                                pangu.spacing(e.target.value),
-                                            )
-                                        }
+                                        onChange={handleChange}
                                     />
                                 </Form.Item>
                             </Form>
@@ -82,13 +101,13 @@ const PanguSpace: React.FC<{}> = () => {
                                 description={
                                     <span className="control-inline">
                                         <span>处理后的文本如下：</span>
-                                        <Upload
-                                            style={{ display: "inline-block" }}
+                                        <Button
+                                            type="primary"
+                                            onClick={handleDownload}
+                                            disabled={!resultValue}
                                         >
-                                            <Button type="primary">
-                                                <DownloadOutlined /> 下载
-                                            </Button>
-                                        </Upload>
+                                            <DownloadOutlined /> 下载
+                                        </Button>
                                     </span>
                                 }
                             />
@@ -97,7 +116,7 @@ const PanguSpace: React.FC<{}> = () => {
                                     <Input.TextArea
                                         rows={24}
                                         placeholder="请复制优化后的文字"
-                                        value={state}
+                                        value={resultValue}
                                     />
                                 </Form.Item>
                             </Form>
