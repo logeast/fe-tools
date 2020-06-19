@@ -31,6 +31,7 @@ export default {
     "menu.list.search-list.projects": "搜索列表（项目）",
     "menu.list.search-list.applications": "搜索列表（应用）",
     "menu.list.pangu-space": "盘古之白: 空格神器",
+    "menu.list.card-generate": "随身记：卡片生成",
 
     "menu.profile": "详情页",
     "menu.profile.basic": "基础详情页",

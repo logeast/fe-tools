@@ -48,6 +48,11 @@ export default [
                 path: "/list/pangu-space",
                 component: "./PanguSpace",
             },
+            {
+                name: "card-generate",
+                path: "/list/card-generate",
+                component: "./CardGenerate",
+            },
         ],
     },
     {

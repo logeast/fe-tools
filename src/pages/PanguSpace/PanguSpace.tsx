@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Row, Col, Card, Form, Input, Upload, Space } from "antd";
 import { PageContainer } from "@ant-design/pro-layout";
 import { useControllableValue } from "@umijs/hooks";
@@ -49,7 +49,7 @@ const PanguSpace: React.FC<{}> = () => {
     };
 
     return (
-        <PageContainer>
+        <PageContainer content="格式化文档，自动在中英文之间加一个空格。">
             <Row gutter={24}>
                 <Col span={12}>
                     <Card>
@@ -124,6 +124,12 @@ const PanguSpace: React.FC<{}> = () => {
                     </Card>
                 </Col>
             </Row>
+            <Card>
+                <strong>依赖项：</strong>
+                <a href="https://github.com/vinta/pangu.js" target="_blank">
+                    vinta/pangu.js
+                </a>
+            </Card>
         </PageContainer>
     );
 };
